@@ -10,14 +10,14 @@
 <style>
 :root{
   --paper:#050706; --panel:#0B100D; --line:#1B2520; --line2:#26332C;
-  --ink:#EEF3EF; --muted:#9BA69F; --accent:#36C46C; --accent-ink:#04140A; --dot:#1F2A24;
+  --ink:#EEF3EF; --muted:#9BA69F; --accent:#36C46C; --accent-ink:#04140A; --dot:#1F2A24; --btn-bd:#3F5047; --btn-bg:rgba(255,255,255,.05); --btn-hover:rgba(255,255,255,.1);
   --display:'Space Grotesk', Inter, system-ui, sans-serif; --body:Inter, system-ui, sans-serif; --mono:'JetBrains Mono', ui-monospace, monospace;
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--body)}
 a{color:inherit;text-decoration:none}
 img.logo{mix-blend-mode:lighten}
-html[data-theme="light"]{--paper:#F3F5F3;--panel:#FFFFFF;--line:#DCE3DE;--line2:#C5D0C8;--ink:#0B100D;--muted:#4F5A53;--accent:#167A3C;--accent-ink:#FFFFFF;--dot:#CBD5CE;--panel-glass:rgba(255,255,255,.72)}
+html[data-theme="light"]{--btn-bd:#9DAAA1;--btn-bg:#FFFFFF;--btn-hover:#E8EEEA;--paper:#F3F5F3;--panel:#FFFFFF;--line:#DCE3DE;--line2:#C5D0C8;--ink:#0B100D;--muted:#4F5A53;--accent:#167A3C;--accent-ink:#FFFFFF;--dot:#CBD5CE;--panel-glass:rgba(255,255,255,.72)}
 html[data-theme="light"] img.logo{mix-blend-mode:multiply;filter:invert(1) hue-rotate(180deg)}
 html{color-scheme:dark}html[data-theme="light"]{color-scheme:light}
 body{transition:background-color .3s,color .3s}
@@ -130,6 +130,13 @@ footer a:hover{color:var(--ink)}
 .icon-btn .moon{display:none}
 html[data-theme="light"] .icon-btn .sun{display:none}
 html[data-theme="light"] .icon-btn .moon{display:block}
+/* botones secundarios: borde y fondo visibles en ambos modos */
+.btn.ghost,.pill,.icon-btn,.chip,.cmd button{border:1.5px solid var(--btn-bd)!important;background:var(--btn-bg);transition:background .2s,border-color .2s,transform .2s}
+.btn.ghost:hover,.pill:hover,.icon-btn:hover,.chip:hover,.cmd button:hover{background:var(--btn-hover);border-color:var(--ink)!important}
+.toggle{border:1.5px solid var(--btn-bd)}
+.chip[aria-current="true"]{background:var(--ink);border-color:var(--ink)!important;color:var(--paper)}
+.btn.primary{box-shadow:0 0 0 1.5px color-mix(in srgb,var(--accent) 70%,#000) inset}
+.btn.primary:hover{filter:brightness(1.07)}
 @media (max-width:900px){
   .hero{min-height:0;padding-top:16px;gap:24px}
   .demo{flex-basis:100%}
