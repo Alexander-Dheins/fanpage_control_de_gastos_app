@@ -61,6 +61,80 @@ h1{margin:0;font:700 clamp(44px,6vw,84px)/1.02 var(--display);letter-spacing:-.0
 .chip[aria-current="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
 .track{width:260px;height:2px;border-radius:2px;background:var(--line);overflow:hidden}
 #prog{height:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0)}
+
+/* ---------- secciones ---------- */
+.block{padding:96px 0}
+.head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:40px}
+h2{margin:0;font:700 clamp(32px,4vw,52px)/1.05 var(--display)}
+.sub{margin:0;max-width:40ch;color:var(--muted)}
+.bento{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}
+.tile{grid-column:span 6;padding:28px;border:1px solid var(--line);border-radius:24px;background:var(--panel);display:flex;flex-direction:column;gap:20px;min-width:0}
+.tile.s5{grid-column:span 5}.tile.s7{grid-column:span 7}
+@media (max-width:860px){.tile,.tile.s5,.tile.s7{grid-column:span 12}}
+h3{margin:0 0 6px;font:700 24px var(--display)}
+.tile p{margin:0;color:var(--muted)}
+.amount{display:flex;align-items:baseline;gap:8px;padding:14px 16px;border:1px solid var(--line2);border-radius:14px;font-family:var(--mono)}
+.amount b{font-weight:500;font-size:32px}
+.caret{display:inline-block;width:2px;height:26px;background:var(--ink);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;border:1px solid var(--line2);border-radius:12px}
+.seg span{padding:10px;text-align:center;border-radius:9px;color:var(--muted)}
+.seg .on{background:#F2B533;color:#1A1204;font-weight:700}
+.tags{display:flex;flex-wrap:wrap;gap:8px;font-size:14px}
+.tags span{padding:6px 12px;border-radius:999px;border:1px solid var(--line2);color:var(--muted)}
+.tags .on{border-color:var(--ink);color:var(--ink)}
+.row2{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.big{font:500 28px var(--mono)}
+.spark{position:relative;height:180px}
+.spark svg{width:100%;height:100%}
+.wipe{position:absolute;inset:0;background:var(--panel);transform-origin:100% 50%}
+.in .wipe{animation:wipe 1.6s cubic-bezier(.4,.1,.2,1) both}
+@keyframes wipe{to{transform:scaleX(0)}}
+.cats{display:flex;flex-direction:column;gap:14px}
+.cat-top{display:flex;justify-content:space-between;font-size:14px}
+.cat-top span:last-child{font-family:var(--mono);color:var(--muted)}
+.bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;border-radius:4px;transform-origin:0 50%;transform:scaleX(0);transition:transform 1s cubic-bezier(.2,.7,.2,1)}
+.in .bar i{transform:scaleX(1)}
+.files{display:flex;gap:12px}
+.file{flex:1;padding:18px;border:1px solid var(--line2);border-radius:16px;display:flex;flex-direction:column;gap:10px;font:500 13px var(--mono)}
+.stackband{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#070A08}
+.pipe{position:relative}
+.pipe-line{position:absolute;left:12.5%;right:12.5%;top:36px;height:1px;background:var(--line2);overflow:hidden}
+.pipe-line i{position:absolute;left:0;top:0;width:100%;height:1px;display:flex;justify-content:flex-end;animation:travel 3.2s cubic-bezier(.5,0,.5,1) infinite}
+.pipe-line i::after{content:"";width:80px;height:1px;background:var(--accent)}
+@keyframes travel{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+.layers{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media (max-width:760px){.layers{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:40px}.pipe-line{display:none}}
+.layer{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;min-width:0}
+.node{width:72px;height:72px;border-radius:20px;border:1px solid var(--line2);background:var(--paper);display:flex;align-items:center;justify-content:center;font:500 13px var(--mono);color:var(--accent)}
+.layer small{font-size:14px;color:var(--muted)}
+.layer strong{font:700 20px var(--display)}
+.layer p{margin:0;font-size:14px;color:var(--muted);max-width:22ch}
+.libs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:48px;font:500 13px var(--mono);color:var(--muted)}
+.libs span{padding:6px 12px;border:1px solid var(--line);border-radius:8px}
+.para{display:flex;flex-wrap:wrap;gap:48px}
+.para>div:first-child{flex:1 1 320px;display:flex;flex-direction:column;gap:16px}
+.people{flex:2 1 520px;min-width:0}
+.person{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 24px;width:100%;padding:24px 0;border:0;border-top:1px solid var(--line);background:transparent;color:var(--ink);text-align:left;cursor:pointer;opacity:.45;transition:opacity .25s}
+.person[aria-expanded="true"]{opacity:1}
+.person .n{font:500 14px var(--mono);color:var(--accent)}
+.person .name{flex:1 1 240px;font:700 clamp(28px,3.4vw,44px)/1.1 var(--display)}
+.person .desc{flex:1 1 260px;font-size:17px;color:var(--muted);display:none}
+.person[aria-expanded="true"] .desc{display:block;animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
+.cta{position:relative;overflow:hidden;border:1px solid var(--line2);border-radius:32px;padding:clamp(32px,6vw,80px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:40px;background:var(--panel)}
+.cta::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:40px 40px;opacity:.6;-webkit-mask-image:linear-gradient(to left,#000,transparent 70%);mask-image:linear-gradient(to left,#000,transparent 70%)}
+.cta>*{position:relative}
+.cta .acts{display:flex;flex-direction:column;gap:12px;flex:0 1 320px}
+.cta .btn{justify-content:center}
+footer{border-top:1px solid var(--line)}
+footer .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding:32px 24px;font-size:14px;color:var(--muted)}
+footer .links{display:flex;gap:24px}
+footer a:hover{color:var(--ink)}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none;transition:none}.pipe-line i,.caret{animation:none}.bar i{transform:none}.wipe{display:none}}
+
 @media (prefers-reduced-motion: reduce){.floor i,.scan,.copy,.badge b{animation:none}}
 </style>
 </head>
@@ -70,7 +144,7 @@ h1{margin:0;font:700 clamp(44px,6vw,84px)/1.02 var(--display);letter-spacing:-.0
   <header>
     <a class="brand" href="#"><img class="logo" src="__LOGO__" alt="" width="40" height="40">PY.DEV</a>
     <nav aria-label="Principal">
-      <a href="#">La app</a><a href="#">Tecnología</a><a href="#">Para quién</a><a href="https://github.com/[USUARIO]/pydev/wiki">Documentación</a>
+      <a href="#app">La app</a><a href="#stack">Tecnología</a><a href="#para">Para quién</a><a href="https://github.com/[USUARIO]/pydev/wiki">Documentación</a>
       <a class="pill" href="https://github.com/[USUARIO]/pydev">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>GitHub</a>
     </nav>
@@ -103,7 +177,111 @@ h1{margin:0;font:700 clamp(44px,6vw,84px)/1.02 var(--display);letter-spacing:-.0
       <div class="track" aria-hidden="true"><div id="prog"></div></div>
     </div>
   </section>
+
+  <section id="app" class="block reveal">
+    <div class="head">
+      <h2 style="max-width:14ch">Todo tu dinero en cuatro pantallas.</h2>
+      <p class="sub">Sin menús escondidos: registras, revisas, filtras y exportas.</p>
+    </div>
+    <div class="bento">
+      <div class="tile s5">
+        <div><h3>Registra en tres toques</h3><p>Monto, tipo y categoría. Listo.</p></div>
+        <div class="amount"><span style="color:var(--muted)">S/</span><b>120.00</b><span class="caret"></span></div>
+        <div class="seg"><span>+ Ingreso</span><span class="on">− Egreso</span></div>
+        <div class="tags"><span class="on">Comida</span><span>Transporte</span><span>Servicios</span><span>Otros</span></div>
+      </div>
+      <div class="tile s7">
+        <div class="row2"><div><h3>Tu saldo, en vivo</h3><p>Cada movimiento actualiza la curva al momento.</p></div><div class="big">S/ 2 531.60</div></div>
+        <div class="spark">
+          <svg viewBox="0 0 600 180" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 150 L60 138 L120 142 L180 110 L240 118 L300 90 L360 96 L420 70 L480 78 L540 46 L600 40 L600 180 L0 180 Z" fill="#36C46C" fill-opacity=".08"/>
+            <path d="M0 150 L60 138 L120 142 L180 110 L240 118 L300 90 L360 96 L420 70 L480 78 L540 46 L600 40" fill="none" stroke="#36C46C" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+            <line x1="0" y1="179" x2="600" y2="179" stroke="#1B2520"/>
+          </svg>
+          <div class="wipe" aria-hidden="true"></div>
+        </div>
+      </div>
+      <div class="tile s7" style="flex-direction:row;flex-wrap:wrap;align-items:center;gap:28px">
+        <div style="flex:1 1 200px"><h3>Sabes a dónde se va</h3><p>Tus egresos agrupados por categoría, de mayor a menor.</p></div>
+        <div class="cats" style="flex:2 1 280px">
+          <div><div class="cat-top"><span>Vivienda</span><span>38%</span></div><div class="bar"><i style="width:38%;background:#F2B533"></i></div></div>
+          <div><div class="cat-top"><span>Comida</span><span>24%</span></div><div class="bar"><i style="width:24%;background:#36C46C;transition-delay:.1s"></i></div></div>
+          <div><div class="cat-top"><span>Transporte</span><span>16%</span></div><div class="bar"><i style="width:16%;background:#8FD9AA;transition-delay:.2s"></i></div></div>
+          <div><div class="cat-top"><span>Otros</span><span>22%</span></div><div class="bar"><i style="width:22%;background:#3B4A41;transition-delay:.3s"></i></div></div>
+        </div>
+      </div>
+      <div class="tile s5" style="justify-content:space-between">
+        <div><h3>Exporta cuando quieras</h3><p>Tu mes en PDF para imprimir o en Excel para seguir sumando.</p></div>
+        <div class="files">
+          <div class="file"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#F2B533" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>noviembre.pdf</div>
+          <div class="file"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#36C46C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 9h16M4 15h16M10 3v18"/></svg>noviembre.xlsx</div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
+
+<section id="stack" class="stackband">
+  <div class="wrap block reveal">
+    <div class="head">
+      <h2 style="max-width:16ch">Cómo está construida por dentro.</h2>
+      <p class="sub">Un camino corto entre tu toque y la base de datos. Todo el código está en el repositorio.</p>
+    </div>
+    <div class="pipe">
+      <div class="pipe-line" aria-hidden="true"><i></i></div>
+      <div class="layers">
+        <div class="layer"><div class="node">01</div><small>Interfaz</small><strong>Next.js + React</strong><p>Pantallas rápidas que funcionan en el celular y en la PC.</p></div>
+        <div class="layer"><div class="node">02</div><small>Lógica</small><strong>TypeScript</strong><p>Cálculo de saldos y categorías con tipos seguros.</p></div>
+        <div class="layer"><div class="node">03</div><small>Datos</small><strong>Supabase + Postgres</strong><p>Tus movimientos guardados con acceso por usuario.</p></div>
+        <div class="layer"><div class="node">04</div><small>Despliegue</small><strong>Docker</strong><p>Se levanta en tu propio servidor con un comando.</p></div>
+      </div>
+    </div>
+    <div class="libs"><span>Tailwind CSS</span><span>Framer Motion</span><span>Recharts</span><span>Zod</span><span>Supabase Auth</span><span>PWA instalable</span></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <section id="para" class="block para reveal">
+    <div>
+      <h2>Hecha para quien lleva sus cuentas.</h2>
+      <p class="sub" style="max-width:36ch">Pasa el cursor por cada perfil para ver cómo la usa.</p>
+    </div>
+    <div class="people">
+      <button type="button" class="person" aria-expanded="true"><span class="n">01</span><span class="name">Freelancers</span><span class="desc">Separa lo que cobras a clientes de tus gastos del día.</span></button>
+      <button type="button" class="person" aria-expanded="false"><span class="n">02</span><span class="name">Estudiantes</span><span class="desc">Sabes cuánto te queda de la mensualidad antes de fin de mes.</span></button>
+      <button type="button" class="person" aria-expanded="false"><span class="n">03</span><span class="name">Familias</span><span class="desc">Un registro claro y compartido de los gastos de la casa.</span></button>
+      <button type="button" class="person" aria-expanded="false"><span class="n">04</span><span class="name">Pequeños negocios</span><span class="desc">Controla la caja chica sin pelear con hojas de cálculo.</span></button>
+    </div>
+  </section>
+
+  <section style="padding:48px 0 120px" class="reveal">
+    <div class="cta">
+      <div style="flex:1 1 380px;display:flex;flex-direction:column;gap:14px">
+        <h2 style="font-size:clamp(32px,4.4vw,60px);line-height:1.02">Tu primer registro, en un minuto.</h2>
+        <p class="sub">Gratis y de código abierto. Clónala, instálala y empieza hoy.</p>
+      </div>
+      <div class="acts">
+        <a class="btn primary" href="https://github.com/[USUARIO]/pydev/releases">Descargar desde GitHub</a>
+        <a class="btn ghost" href="https://github.com/[USUARIO]/pydev/wiki">Leer la documentación</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div style="display:flex;align-items:center;gap:10px"><img class="logo" src="__LOGO__" alt="PY.DEV" width="32" height="32"><span>PY.DEV, ingresos y egresos. Licencia [LICENCIA].</span></div>
+    <div class="links"><a href="https://github.com/[USUARIO]/pydev">GitHub</a><a href="https://github.com/[USUARIO]/pydev/wiki">Documentación</a><a href="https://github.com/[USUARIO]/pydev/issues">Reportar un problema</a></div>
+  </div>
+</footer>
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.18});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+  var ps=document.querySelectorAll('.person');
+  ps.forEach(function(p){var open=function(){ps.forEach(function(q){q.setAttribute('aria-expanded',String(q===p));});};p.addEventListener('mouseenter',open);p.addEventListener('focus',open);p.addEventListener('click',open);});
+})();
+</script>
 <script>__JS__</script>
 </body>
 </html>
