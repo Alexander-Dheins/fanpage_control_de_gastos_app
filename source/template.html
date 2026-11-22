@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PY.DEV — Ingresos y egresos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#050706; --panel:#0B100D; --line:#1B2520; --line2:#26332C;
+  --ink:#EEF3EF; --muted:#9BA69F; --accent:#36C46C; --accent-ink:#04140A;
+  --display:'Space Grotesk', Inter, system-ui, sans-serif; --body:Inter, system-ui, sans-serif; --mono:'JetBrains Mono', ui-monospace, monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--body)}
+a{color:inherit;text-decoration:none}
+img.logo{mix-blend-mode:lighten}
+.bg{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.sky{position:absolute;inset:0;background-image:radial-gradient(#1F2A24 1px,transparent 1px);background-size:28px 28px;-webkit-mask-image:linear-gradient(#000,transparent 60%);mask-image:linear-gradient(#000,transparent 60%)}
+.floor{position:absolute;left:-50%;right:-50%;top:52%;height:110%;transform-origin:50% 0;transform:perspective(700px) rotateX(64deg);overflow:hidden;-webkit-mask-image:linear-gradient(#000,transparent 65%);mask-image:linear-gradient(#000,transparent 65%)}
+.floor i{position:absolute;inset:-64px 0 0 0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;animation:floor 5s linear infinite}
+@keyframes floor{to{transform:translateY(64px)}}
+.scan{position:absolute;left:0;right:0;top:0;height:1px;background:var(--accent);opacity:.3;animation:scan 8s linear infinite}
+@keyframes scan{to{transform:translateY(100vh)}}
+.wrap{position:relative;max-width:1240px;margin:0 auto;padding:0 24px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:20px 0}
+.brand{display:flex;align-items:center;gap:10px;font:700 20px var(--display)}
+nav{display:flex;align-items:center;gap:28px;flex-wrap:wrap;font-size:15px}
+nav a{color:var(--muted);transition:color .2s}
+nav a:hover{color:var(--ink)}
+.pill{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border:1px solid var(--line2);border-radius:999px;color:var(--ink)!important}
+.hero{display:flex;flex-wrap:wrap;align-items:center;gap:32px;min-height:calc(100vh - 88px);padding-bottom:40px}
+.copy{flex:1 1 400px;min-width:0;display:flex;flex-direction:column;gap:24px;animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}}
+.badge{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;padding:6px 12px;border:1px solid var(--line2);border-radius:999px;font-size:14px;color:var(--muted)}
+.badge b{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.3}}
+h1{margin:0;font:700 clamp(44px,6vw,84px)/1.02 var(--display);letter-spacing:-.02em}
+.lead{margin:0;max-width:30ch;font-size:20px;color:var(--muted)}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;font-weight:500;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);font-weight:700}
+.btn.ghost{border:1px solid var(--line2)}
+.cmd{display:flex;align-items:center;gap:12px;max-width:470px;padding:6px 6px 6px 16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);font:500 14px var(--mono);color:var(--muted)}
+.cmd span{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.cmd button{min-height:36px;padding:0 12px;border:1px solid var(--line2);border-radius:8px;background:transparent;color:var(--ink);font:500 13px var(--body);cursor:pointer}
+.plat{font-size:15px;color:var(--muted)}
+.demo{flex:1.25 1 520px;min-width:0;display:flex;flex-direction:column;align-items:center;gap:16px}
+.toggle{display:inline-flex;padding:4px;border:1px solid var(--line2);border-radius:999px;background:var(--panel)}
+.toggle button{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border:0;border-radius:999px;background:transparent;color:var(--muted);font:500 15px var(--body);cursor:pointer;transition:background .25s,color .25s}
+.toggle button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+#stage{position:relative;width:100%;height:min(66vh,620px);min-height:460px;opacity:0;transition:opacity .8s}
+#stage.ready{opacity:1}
+#gl{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+#gl:active{cursor:grabbing}
+#hint{position:absolute;right:8px;bottom:8px;font-size:13px;color:var(--muted);transition:opacity .4s;pointer-events:none}
+#chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.chip{min-height:44px;padding:0 16px;border:1px solid var(--line2);border-radius:999px;background:transparent;color:var(--muted);font:500 14px var(--body);cursor:pointer;transition:background .25s,color .25s}
+.chip[aria-current="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.track{width:260px;height:2px;border-radius:2px;background:var(--line);overflow:hidden}
+#prog{height:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0)}
+@media (prefers-reduced-motion: reduce){.floor i,.scan,.copy,.badge b{animation:none}}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"><div class="sky"></div><div class="floor"><i></i></div><div class="scan"></div></div>
+<div class="wrap">
+  <header>
+    <a class="brand" href="#"><img class="logo" src="__LOGO__" alt="" width="40" height="40">PY.DEV</a>
+    <nav aria-label="Principal">
+      <a href="#">La app</a><a href="#">Tecnología</a><a href="#">Para quién</a><a href="https://github.com/[USUARIO]/pydev/wiki">Documentación</a>
+      <a class="pill" href="https://github.com/[USUARIO]/pydev">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>GitHub</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="copy">
+      <span class="badge"><b></b>Código abierto, versión 1.0</span>
+      <h1>Cada sol,<br>en su lugar.</h1>
+      <p class="lead">Registra ingresos y egresos en segundos y mira tu saldo al instante.</p>
+      <div class="ctas">
+        <a class="btn primary" href="https://github.com/[USUARIO]/pydev/releases">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>Descargar desde GitHub</a>
+        <a class="btn ghost" href="https://github.com/[USUARIO]/pydev/wiki">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 7h6"/></svg>Ver documentación</a>
+      </div>
+      <div class="cmd"><span style="color:var(--accent);flex:0">$</span><span>git clone github.com/[USUARIO]/pydev</span><button id="copy" type="button" data-cmd="git clone https://github.com/[USUARIO]/pydev">Copiar</button></div>
+      <p class="plat">La misma app en tu celular y en tu computadora.</p>
+    </div>
+
+    <div class="demo">
+      <div class="toggle" role="group" aria-label="Ver en">
+        <button type="button" data-device="phone" aria-pressed="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg>Celular</button>
+        <button type="button" data-device="laptop" aria-pressed="false">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4" width="16" height="11" rx="2"/><path d="M2 19h20"/></svg>Laptop</button>
+      </div>
+      <div id="stage"><canvas id="gl" aria-label="Modelo 3D de la app PY.DEV, arrastra para girarlo" role="img"></canvas><span id="hint">Arrastra para girar</span></div>
+      <div id="chips" role="group" aria-label="Pantallas de la app"></div>
+      <div class="track" aria-hidden="true"><div id="prog"></div></div>
+    </div>
+  </section>
+</div>
+<script>__JS__</script>
+</body>
+</html>
