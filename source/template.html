@@ -21,13 +21,13 @@ html[data-theme="light"]{--paper:#F3F5F3;--panel:#FFFFFF;--line:#DCE3DE;--line2:
 html[data-theme="light"] img.logo{mix-blend-mode:multiply;filter:invert(1) hue-rotate(180deg)}
 html{color-scheme:dark}html[data-theme="light"]{color-scheme:light}
 body{transition:background-color .3s,color .3s}
-.bg{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;contain:strict}
 .sky{position:absolute;inset:0;background-image:radial-gradient(var(--dot) 1px,transparent 1px);background-size:28px 28px;-webkit-mask-image:linear-gradient(#000,transparent 60%);mask-image:linear-gradient(#000,transparent 60%)}
 .floor{position:absolute;left:-50%;right:-50%;top:52%;height:110%;transform-origin:50% 0;transform:perspective(700px) rotateX(64deg);overflow:hidden;-webkit-mask-image:linear-gradient(#000,transparent 65%);mask-image:linear-gradient(#000,transparent 65%)}
-.floor i{position:absolute;inset:-64px 0 0 0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;animation:floor 5s linear infinite}
+.floor i{position:absolute;inset:-64px 0 0 0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;animation:floor 5s linear infinite;will-change:transform}
 @keyframes floor{to{transform:translateY(64px)}}
 .wrap{position:relative;max-width:1240px;margin:0 auto;padding:0 24px}
-.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 78%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 94%,transparent);border-bottom:1px solid var(--line)}
 .hdr{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px 24px}
 section[id]{scroll-margin-top:88px}
 .brand{display:flex;align-items:center;gap:10px;font:700 20px var(--display)}

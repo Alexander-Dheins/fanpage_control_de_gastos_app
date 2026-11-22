@@ -12,7 +12,7 @@ const hint = document.getElementById('hint');
 
 // ---------- render ----------
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+renderer.setPixelRatio(Math.min(1.5, devicePixelRatio));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.05;
@@ -25,6 +25,8 @@ const rim = new THREE.PointLight(0x36c46c, 6, 8); rim.position.set(-2.2, 1.6, -1
 const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 50);
 const controls = new OrbitControls(camera, canvas);
 controls.enableZoom = false; controls.enablePan = false; controls.enableDamping = true; controls.dampingFactor = 0.08;
+// el zoom está apagado: se quita el listener de rueda (no pasivo) para que el scroll de la página no espere al hilo principal
+canvas.removeEventListener('wheel', controls._onMouseWheel);
 controls.rotateSpeed = 0.6; controls.minPolarAngle = Math.PI * 0.28; controls.maxPolarAngle = Math.PI * 0.52;
 controls.minAzimuthAngle = -1.1; controls.maxAzimuthAngle = 1.1;
 // en pantallas táctiles el arrastre debe desplazar la página, no girar el modelo
@@ -38,7 +40,7 @@ function radialTex(stops) {
   const gr = g.createRadialGradient(128, 128, 0, 128, 128, 128); stops.forEach(([o, col]) => gr.addColorStop(o, col));
   g.fillStyle = gr; g.fillRect(0, 0, 256, 256); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
 }
-const shadow = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 2.6), new THREE.MeshBasicMaterial({ map: radialTex([[0, 'rgba(0,0,0,.75)'], [0.55, 'rgba(0,0,0,.25)'], [1, 'rgba(0,0,0,0)']]), transparent: true, depthWrite: false }));
+const shadow = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 2.2), new THREE.MeshBasicMaterial({ map: radialTex([[0, 'rgba(0,0,0,.75)'], [0.55, 'rgba(0,0,0,.25)'], [1, 'rgba(0,0,0,0)']]), transparent: true, depthWrite: false }));
 shadow.rotation.x = -Math.PI / 2; shadow.position.y = 0.001; scene.add(shadow);
 const ringMat = new THREE.MeshBasicMaterial({ color: 0x36c46c, transparent: true, opacity: 0.45, side: THREE.DoubleSide });
 const ring = new THREE.Mesh(new THREE.RingGeometry(1.55, 1.565, 128, 1, 0, Math.PI * 1.6), ringMat); ring.rotation.x = -Math.PI / 2; ring.position.y = 0.002; scene.add(ring);
@@ -52,8 +54,8 @@ function screenTex(w, h) {
   const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
   return { c, ctx: c.getContext('2d'), tex };
 }
-const PH = { lw: 320, lh: Math.round(320 / 0.4631) }; PH.s = screenTex(PH.lw * 2, PH.lh * 2);
-const LP = { lw: 1280, lh: 800 }; LP.s = screenTex(1600, 1000);
+const PH = { lw: 320, lh: Math.round(320 / 0.4631) }; PH.s = screenTex(Math.round(PH.lw * 1.6), Math.round(PH.lh * 1.6));
+const LP = { lw: 1280, lh: 800 }; LP.s = screenTex(1280, 800);
 
 // ---------- modelos GLB ----------
 const loader = new GLTFLoader();
@@ -114,8 +116,18 @@ function resize() {
 }
 new ResizeObserver(resize).observe(stage); resize();
 
+// solo se dibuja mientras la escena está en pantalla y la pestaña está activa
+let onScreen = true;
+new IntersectionObserver((es) => { onScreen = es[0].isIntersecting; }, { rootMargin: '100px' }).observe(stage);
+let lastTex = 0;
+
 function frame(now) {
-  const dt = Math.min(0.05, (now - last) / 1000); last = now; clock += dt;
+  requestAnimationFrame(frame);
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if (!onScreen || document.hidden) return;
+  clock += dt;
+  const drawTex = now - lastTex > 33; // pantallas de la app a ~30 fps
+  if (drawTex) lastTex = now;
   if (current) {
     const d = devices[current], since = clock - switchAt;
     // entrada del nuevo equipo / salida del anterior
@@ -126,7 +138,7 @@ function frame(now) {
     const fl = reduce ? 0 : Math.sin(clock * 1.2) * 0.035;
     d.group.position.y = fl; d.group.rotation.y = reduce ? 0 : Math.sin(clock * 0.5) * (touch ? 0.22 : 0.06);
     shadow.scale.setScalar(current === 'laptop' ? 1.15 : 0.7);
-    shadow.material.opacity = document.documentElement.dataset.theme === 'light' ? 0.45 : 1;
+    shadow.material.opacity = document.documentElement.dataset.theme === 'light' ? 0.3 : 1;
     // cámara hacia el encuadre del equipo
     const offset = new THREE.Vector3().subVectors(camera.position, controls.target);
     if (!camInit) { camera.position.set(0.4, 1.7, d.dist); controls.target.copy(d.target); camInit = true; }
@@ -145,7 +157,7 @@ function frame(now) {
     progEl.style.transform = `scaleX(${Math.max(0, lt / CHAPTERS[chapter].dur)})`;
     const power = current === 'laptop' ? easeOut((since - ENTER * 0.6 - LID * 0.5) / 0.6) : easeOut(since / 0.6);
     const L = Math.max(0, lt);
-    if (current === 'phone') {
+    if (!drawTex) {} else if (current === 'phone') {
       const { ctx, c, tex } = PH.s; ctx.setTransform(c.width / PH.lw, 0, 0, c.height / PH.lh, 0, 0);
       drawPhone(ctx, PH.lw, PH.lh, chapter, L, clock, logo.complete ? logo : null, power); tex.needsUpdate = true;
     } else {
@@ -156,7 +168,6 @@ function frame(now) {
   if (!reduce) { ring.rotation.z += dt * 0.25; ringMat.opacity = 0.3 + Math.sin(clock * 2) * 0.15; }
   controls.update();
   renderer.render(scene, camera);
-  requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
 
