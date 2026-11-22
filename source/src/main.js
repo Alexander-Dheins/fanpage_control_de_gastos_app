@@ -27,6 +27,9 @@ const controls = new OrbitControls(camera, canvas);
 controls.enableZoom = false; controls.enablePan = false; controls.enableDamping = true; controls.dampingFactor = 0.08;
 controls.rotateSpeed = 0.6; controls.minPolarAngle = Math.PI * 0.28; controls.maxPolarAngle = Math.PI * 0.52;
 controls.minAzimuthAngle = -1.1; controls.maxAzimuthAngle = 1.1;
+// en pantallas táctiles el arrastre debe desplazar la página, no girar el modelo
+const touch = matchMedia('(pointer: coarse)').matches;
+if (touch) { controls.enableRotate = false; canvas.style.touchAction = 'pan-y'; hint.textContent = ''; }
 controls.addEventListener('start', () => { hint.style.opacity = '0'; });
 
 // piso: sombra de contacto + anillo holográfico
@@ -35,7 +38,7 @@ function radialTex(stops) {
   const gr = g.createRadialGradient(128, 128, 0, 128, 128, 128); stops.forEach(([o, col]) => gr.addColorStop(o, col));
   g.fillStyle = gr; g.fillRect(0, 0, 256, 256); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
 }
-const shadow = new THREE.Mesh(new THREE.PlaneGeometry(3.6, 3.6), new THREE.MeshBasicMaterial({ map: radialTex([[0, 'rgba(0,0,0,.75)'], [0.55, 'rgba(0,0,0,.25)'], [1, 'rgba(0,0,0,0)']]), transparent: true, depthWrite: false }));
+const shadow = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 2.6), new THREE.MeshBasicMaterial({ map: radialTex([[0, 'rgba(0,0,0,.75)'], [0.55, 'rgba(0,0,0,.25)'], [1, 'rgba(0,0,0,0)']]), transparent: true, depthWrite: false }));
 shadow.rotation.x = -Math.PI / 2; shadow.position.y = 0.001; scene.add(shadow);
 const ringMat = new THREE.MeshBasicMaterial({ color: 0x36c46c, transparent: true, opacity: 0.45, side: THREE.DoubleSide });
 const ring = new THREE.Mesh(new THREE.RingGeometry(1.55, 1.565, 128, 1, 0, Math.PI * 1.6), ringMat); ring.rotation.x = -Math.PI / 2; ring.position.y = 0.002; scene.add(ring);
@@ -121,14 +124,19 @@ function frame(now) {
     if (d.lid) d.lid.rotation.x = THREE.MathUtils.lerp(Math.PI / 2 - 0.04, devices.laptop.lidOpen, easeOut((since - ENTER * 0.6) / LID));
     // flotación
     const fl = reduce ? 0 : Math.sin(clock * 1.2) * 0.035;
-    d.group.position.y = fl; d.group.rotation.y = reduce ? 0 : Math.sin(clock * 0.5) * 0.06;
-    shadow.scale.setScalar(current === 'laptop' ? 1.25 : 0.75);
+    d.group.position.y = fl; d.group.rotation.y = reduce ? 0 : Math.sin(clock * 0.5) * (touch ? 0.22 : 0.06);
+    shadow.scale.setScalar(current === 'laptop' ? 1.15 : 0.7);
+    shadow.material.opacity = document.documentElement.dataset.theme === 'light' ? 0.45 : 1;
     // cámara hacia el encuadre del equipo
     const offset = new THREE.Vector3().subVectors(camera.position, controls.target);
     if (!camInit) { camera.position.set(0.4, 1.7, d.dist); controls.target.copy(d.target); camInit = true; }
     else {
       controls.target.lerp(d.target, 0.06);
-      const len = offset.length(); offset.setLength(THREE.MathUtils.lerp(len, d.dist, 0.06));
+      // en pantallas angostas se aleja la cámara para que el equipo entre completo
+      const hHalf = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect;
+      const need = current === 'laptop' ? 1.55 / hHalf : 0.62 / hHalf;
+      const dist = Math.max(d.dist, need);
+      const len = offset.length(); offset.setLength(THREE.MathUtils.lerp(len, dist, 0.06));
       camera.position.copy(controls.target).add(offset);
     }
     // capítulo de la app
