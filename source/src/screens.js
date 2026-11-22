@@ -158,7 +158,7 @@ function lapLogin(ctx, W, H, lt, t, logo) {
   for (let x = 0; x < W / 2; x += 40) { ctx.beginPath(); ctx.moveTo(x + 0.5, 0); ctx.lineTo(x + 0.5, H); ctx.stroke(); }
   for (let y = 0; y < H; y += 40) { ctx.beginPath(); ctx.moveTo(0, y + 0.5); ctx.lineTo(W / 2, y + 0.5); ctx.stroke(); }
   if (logo) ctx.drawImage(logo, 80, 220, 120, 120);
-  text(ctx, 'Cada sol,', 80, 420, 56, C.ink, F.d, 700); text(ctx, 'en su lugar.', 80, 482, 56, C.ink, F.d, 700);
+  text(ctx, 'Controla', 80, 420, 56, C.ink, F.d, 700); text(ctx, 'gastos', 80, 482, 56, C.ink, F.d, 700);
   text(ctx, 'PY.DEV, ingresos y egresos', 80, 530, 18, C.muted);
   // formulario
   const s = loginState(lt), fx = W / 2 + 120, fw = W / 2 - 240;
