@@ -24,7 +24,6 @@ Una página estática, de un solo archivo, que presenta la app PY.DEV:
 - **Funciones de la app:** registro rápido, saldo en vivo, gastos por categoría y exportación a PDF y Excel.
 - **Modo claro y oscuro:** respeta la preferencia del sistema y se puede cambiar con un botón.
 - **Adaptada a celulares:** en pantallas táctiles el modelo gira solo y el dedo desplaza la página.
-- **Para quién es:** freelancers, estudiantes, familias y pequeños negocios.
 - Accesos directos para descargar la app y leer su documentación.
 
 ## Verla en tu computadora

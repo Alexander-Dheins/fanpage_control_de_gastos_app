@@ -26,10 +26,10 @@ body{transition:background-color .3s,color .3s}
 .floor{position:absolute;left:-50%;right:-50%;top:52%;height:110%;transform-origin:50% 0;transform:perspective(700px) rotateX(64deg);overflow:hidden;-webkit-mask-image:linear-gradient(#000,transparent 65%);mask-image:linear-gradient(#000,transparent 65%)}
 .floor i{position:absolute;inset:-64px 0 0 0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;animation:floor 5s linear infinite}
 @keyframes floor{to{transform:translateY(64px)}}
-.scan{position:absolute;left:0;right:0;top:0;height:1px;background:var(--accent);opacity:.3;animation:scan 8s linear infinite}
-@keyframes scan{to{transform:translateY(100vh)}}
 .wrap{position:relative;max-width:1240px;margin:0 auto;padding:0 24px}
-header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:20px 0}
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 78%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.hdr{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px 24px}
+section[id]{scroll-margin-top:88px}
 .brand{display:flex;align-items:center;gap:10px;font:700 20px var(--display)}
 nav{display:flex;align-items:center;gap:28px;flex-wrap:wrap;font-size:15px}
 nav a{color:var(--muted);transition:color .2s}
@@ -107,15 +107,6 @@ h3{margin:0 0 6px;font:700 24px var(--display)}
 .in .bar i{transform:scaleX(1)}
 .files{display:flex;gap:12px}
 .file{flex:1;padding:18px;border:1px solid var(--line2);border-radius:16px;display:flex;flex-direction:column;gap:10px;font:500 13px var(--mono)}
-.para{display:flex;flex-wrap:wrap;gap:48px}
-.para>div:first-child{flex:1 1 320px;display:flex;flex-direction:column;gap:16px}
-.people{flex:2 1 520px;min-width:0}
-.person{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 24px;width:100%;padding:24px 0;border:0;border-top:1px solid var(--line);background:transparent;color:var(--ink);text-align:left;cursor:pointer;opacity:.45;transition:opacity .25s}
-.person[aria-expanded="true"]{opacity:1}
-.person .n{font:500 14px var(--mono);color:var(--accent)}
-.person .name{flex:1 1 240px;font:700 clamp(28px,3.4vw,44px)/1.1 var(--display)}
-.person .desc{flex:1 1 260px;font-size:17px;color:var(--muted);display:none}
-.person[aria-expanded="true"] .desc{display:block;animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
 .cta{position:relative;overflow:hidden;border:1px solid var(--line2);border-radius:32px;padding:clamp(32px,6vw,80px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:40px;background:var(--panel)}
 .cta::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:40px 40px;opacity:.6;-webkit-mask-image:linear-gradient(to left,#000,transparent 70%);mask-image:linear-gradient(to left,#000,transparent 70%)}
 .cta>*{position:relative}
@@ -140,7 +131,7 @@ html[data-theme="light"] .icon-btn .moon{display:block}
 }
 @media (max-width:720px){
   .wrap{padding:0 18px}
-  header{padding:14px 0;flex-wrap:nowrap}
+  .hdr{padding:10px 18px;flex-wrap:nowrap}
   nav{gap:10px}
   nav .nl{display:none}
   .pill{padding:0 14px}
@@ -156,22 +147,21 @@ html[data-theme="light"] .icon-btn .moon{display:block}
   .tile{padding:22px}
   .files{flex-direction:column}
   .row2 .big{font-size:22px}
-  .person{padding:18px 0}
   .cta .acts{flex:1 1 100%}
   footer .wrap{flex-direction:column;align-items:flex-start}
   footer .links{flex-wrap:wrap;gap:16px}
   .floor{top:60%}
 }
-@media (prefers-reduced-motion: reduce){.floor i,.scan,.copy{animation:none}}
+@media (prefers-reduced-motion: reduce){.floor i,.copy{animation:none}}
 </style>
 </head>
 <body>
-<div class="bg" aria-hidden="true"><div class="sky"></div><div class="floor"><i></i></div><div class="scan"></div></div>
-<div class="wrap">
-  <header>
+<div class="bg" aria-hidden="true"><div class="sky"></div><div class="floor"><i></i></div></div>
+<header class="topbar">
+  <div class="wrap hdr">
     <a class="brand" href="#"><img class="logo" src="__LOGO__" alt="" width="40" height="40">PY.DEV</a>
     <nav aria-label="Principal">
-      <a class="nl" href="#app">La app</a><a class="nl" href="#para">Para quién</a><a class="nl" href="https://github.com/[USUARIO]/pydev/wiki">Documentación</a>
+      <a class="nl" href="#app">La app</a><a class="nl" href="https://github.com/[USUARIO]/pydev/wiki">Documentación</a>
       <button class="icon-btn" id="theme" type="button" aria-label="Cambiar a modo claro">
         <svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
         <svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
@@ -179,7 +169,9 @@ html[data-theme="light"] .icon-btn .moon{display:block}
       <a class="pill" href="https://github.com/[USUARIO]/pydev">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>GitHub</a>
     </nav>
-  </header>
+  </div>
+</header>
+<div class="wrap">
 
   <section class="hero">
     <div class="copy">
@@ -258,18 +250,6 @@ html[data-theme="light"] .icon-btn .moon{display:block}
 
 
 <div class="wrap">
-  <section id="para" class="block para reveal">
-    <div>
-      <h2>Hecha para quien lleva sus cuentas.</h2>
-      <p class="sub" style="max-width:36ch">Pasa el cursor por cada perfil para ver cómo la usa.</p>
-    </div>
-    <div class="people">
-      <button type="button" class="person" aria-expanded="true"><span class="n">01</span><span class="name">Freelancers</span><span class="desc">Separa lo que cobras a clientes de tus gastos del día.</span></button>
-      <button type="button" class="person" aria-expanded="false"><span class="n">02</span><span class="name">Estudiantes</span><span class="desc">Sabes cuánto te queda de la mensualidad antes de fin de mes.</span></button>
-      <button type="button" class="person" aria-expanded="false"><span class="n">03</span><span class="name">Familias</span><span class="desc">Un registro claro y compartido de los gastos de la casa.</span></button>
-      <button type="button" class="person" aria-expanded="false"><span class="n">04</span><span class="name">Pequeños negocios</span><span class="desc">Controla la caja chica sin pelear con hojas de cálculo.</span></button>
-    </div>
-  </section>
 
   <section style="padding:48px 0 120px" class="reveal">
     <div class="cta">
@@ -299,8 +279,6 @@ html[data-theme="light"] .icon-btn .moon{display:block}
   tb.addEventListener('click',function(){var n=document.documentElement.dataset.theme==='light'?'dark':'light';document.documentElement.dataset.theme=n;try{localStorage.setItem('pydev-theme',n)}catch(e){}label();});
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.18});
   document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
-  var ps=document.querySelectorAll('.person');
-  ps.forEach(function(p){var open=function(){ps.forEach(function(q){q.setAttribute('aria-expanded',String(q===p));});};p.addEventListener('mouseenter',open);p.addEventListener('focus',open);p.addEventListener('click',open);});
 })();
 </script>
 <script>__JS__</script>
