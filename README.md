@@ -49,6 +49,7 @@ Como es un sitio estático, sirve cualquier hosting de archivos. En **Vercel**:
 
 ```
 ├── index.html              Página lista para publicar (se genera con source/build.sh)
+├── favicon.ico, favicon-32.png, apple-touch-icon.png, icon-512.png   Íconos del sitio (logo)
 ├── models/
 │   ├── phone.glb           Celular: la pantalla es la malla "Screen"
 │   └── laptop.glb          Laptop: pantalla "Screen" y tapa con bisagra "Lid"
