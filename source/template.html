@@ -179,6 +179,9 @@ html[data-theme="light"] .icon-btn .moon{display:block}
 .chip[aria-current="true"]{background:var(--ink);border-color:var(--ink)!important;color:var(--paper)}
 .btn.primary{box-shadow:0 0 0 1.5px color-mix(in srgb,var(--accent) 70%,#000) inset}
 .btn.primary:hover{filter:brightness(1.07)}
+.stars{display:inline-flex;align-items:center;gap:4px;margin-left:4px;padding-left:10px;border-left:1.5px solid var(--btn-bd);font:500 13px var(--mono);color:var(--muted)}
+.stars[hidden]{display:none}
+.stars b{font-weight:500;color:var(--ink)}
 @media (max-width:900px){
   .hero{min-height:0;padding-top:16px;gap:24px}
   .demo{flex-basis:100%}
@@ -226,8 +229,8 @@ html[data-theme="light"] .icon-btn .moon{display:block}
         <svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
         <svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
       </button>
-      <a class="pill" href="https://github.com/Alexander-Dheins/app_flotter_presupuesto">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>GitHub</a>
+      <a class="pill" href="https://github.com/Alexander-Dheins" aria-label="Perfil de GitHub de Alexander-Dheins">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>GitHub<span class="stars" id="stars" hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg><b></b></span></a>
     </div>
   </div>
 </header>
@@ -333,6 +336,14 @@ html[data-theme="light"] .icon-btn .moon{display:block}
 </footer>
 <script>
 (function(){
+  // estrellas: suma de las estrellas de los repos públicos del perfil (API pública de GitHub, guardada 1 h)
+  (function(){
+    var el=document.getElementById('stars'),key='pydev-stars',show=function(n){el.querySelector('b').textContent=n;el.hidden=false;el.parentNode.setAttribute('aria-label','Perfil de GitHub de Alexander-Dheins, '+n+' estrellas');};
+    try{var c=JSON.parse(localStorage.getItem(key)||'null');if(c&&Date.now()-c.t<3600000){show(c.n);return;}}catch(e){}
+    fetch('https://api.github.com/users/Alexander-Dheins/repos?per_page=100&type=owner').then(function(r){return r.ok?r.json():Promise.reject();}).then(function(rs){
+      var n=rs.reduce(function(s,r){return s+(r.stargazers_count||0);},0);show(n);try{localStorage.setItem(key,JSON.stringify({n:n,t:Date.now()}));}catch(e){}
+    }).catch(function(){});
+  })();
   var tb=document.getElementById('theme');
   function label(){tb.setAttribute('aria-label',document.documentElement.dataset.theme==='light'?'Cambiar a modo oscuro':'Cambiar a modo claro');}
   label();
